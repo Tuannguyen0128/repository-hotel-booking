@@ -1,0 +1,14 @@
+kafka:
+  brokers:
+   - 0.0.0.0:29092
+  username: admin
+  password: admin
+
+database:
+  host: localhost:3306
+  username: root
+  password: example
+  schema: hotel_db
+server:
+  port: :8084
+
