@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"repository-hotel-booking/internal/app/model"
 	"repository-hotel-booking/internal/app/service"
+	"strconv"
 )
 
 func AccountRoutes(s *service.Service) []Route {
@@ -14,10 +15,14 @@ func AccountRoutes(s *service.Service) []Route {
 			Uri:    "/accounts",
 			Method: http.MethodGet,
 			Handler: func(c *gin.Context) {
+				page, _ := strconv.Atoi(c.Query("page"))
+				size, _ := strconv.Atoi(c.Query("size"))
 				accountQuery := &model.AccountQuery{
 					ID:       c.Query("id"),
 					StaffID:  c.Query("staff_id"),
 					Username: c.Query("username"),
+					Page:     page,
+					Size:     size,
 				}
 				accounts, err := s.GetAccounts(accountQuery)
 				if err != nil {

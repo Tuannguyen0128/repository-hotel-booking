@@ -4,6 +4,8 @@ type AccountQuery struct {
 	ID       string
 	StaffID  string
 	Username string
+	Page     int
+	Size     int
 }
 
 type Account struct {

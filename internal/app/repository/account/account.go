@@ -41,6 +41,10 @@ func (r *Repository) GetAccounts(q *model.AccountQuery) ([]model.Account, error)
 		query += fmt.Sprintf(" TRUE")
 	}
 
+	if q.Page != 0 {
+		query += fmt.Sprintf(" LIMIT %d OFFSET %d", q.Size, (q.Page-1)*q.Size)
+	}
+
 	fmt.Println(query)
 
 	stmt, err := r.db.Prepare(query)
