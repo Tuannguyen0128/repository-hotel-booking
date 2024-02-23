@@ -78,7 +78,7 @@ func (r *Repository) InsertAccount(a *model.Account) (string, *model.ErrInfo) {
 	}
 	_, err = stmt.Exec(newID, a.StaffID, a.Username, a.Password, a.UserRoleID)
 	if err != nil {
-		fmt.Println(err.Error())
+
 		return "", util.BuildErrInfo("E01", err.Error())
 	}
 

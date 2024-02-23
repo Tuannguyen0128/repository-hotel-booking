@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -19,10 +18,14 @@ func AccountRoutes(s *service.Service) []Route {
 			Method: http.MethodGet,
 			Handler: func(c *gin.Context) {
 				page, er := strconv.Atoi(c.Query("page"))
-				size, er := strconv.Atoi(c.Query("size"))
-				if er != nil {
 
+				size, er := strconv.Atoi(c.Query("size"))
+
+				if er != nil {
+					page = 0
+					size = 0
 				}
+
 				accountQuery := &model.AccountQuery{
 					ID:       c.Query("id"),
 					StaffID:  c.Query("staff_id"),
@@ -32,7 +35,6 @@ func AccountRoutes(s *service.Service) []Route {
 				}
 				accounts, err := s.GetAccounts(accountQuery)
 				if err.Code != "" {
-					fmt.Println(err.Error())
 					c.JSON(http.StatusBadRequest, util.BuildResponse(err, nil))
 					return
 				}
