@@ -3,14 +3,17 @@ package routes
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"repository-hotel-booking/internal/app/model"
 	"repository-hotel-booking/internal/app/service"
+	"repository-hotel-booking/internal/app/util"
 	"strconv"
 )
 
 func AccountRoutes(s *service.Service) []Route {
 	return []Route{
+		// Get multiple account
 		{
 			Uri:    "/accounts",
 			Method: http.MethodGet,
@@ -25,12 +28,31 @@ func AccountRoutes(s *service.Service) []Route {
 					Size:     size,
 				}
 				accounts, err := s.GetAccounts(accountQuery)
-				if err != nil {
+				if err.Code != "" {
 					fmt.Println(err.Error())
-					c.JSON(http.StatusBadRequest, nil)
+					c.JSON(http.StatusBadRequest, util.BuildResponse(err, nil))
 					return
 				}
-				c.JSON(http.StatusOK, model.Accounts{Accounts: accounts})
+				c.JSON(http.StatusOK, util.BuildResponse(err,
+					model.Accounts{
+						Accounts: accounts,
+					}))
+			},
+		},
+		// Add one account
+		{
+			Uri:    "/account",
+			Method: http.MethodPost,
+			Handler: func(c *gin.Context) {
+				newAccount := &model.Account{}
+				c.ShouldBindJSON(newAccount)
+				id, err := s.AddAccount(newAccount)
+				if err.Code != "" {
+					log.Println(err.Error())
+					c.JSON(http.StatusBadRequest, util.BuildResponse(err, nil))
+					return
+				}
+				c.JSON(http.StatusOK, util.BuildResponse(err, model.AddAccountResponse{ID: id}))
 			},
 		},
 		//{

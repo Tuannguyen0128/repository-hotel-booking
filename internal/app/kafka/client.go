@@ -6,7 +6,6 @@ import (
 
 type MQ struct {
 	CClient *kafka.Consumer
-	PClient *kafka.Producer
 }
 
 func InitConnection() *MQ {
@@ -18,13 +17,7 @@ func InitConnection() *MQ {
 	if err != nil {
 		return nil
 	}
-	producer, err := kafka.NewProducer(&kafka.ConfigMap{
-		"bootstrap.servers": "0.0.0.0:29092",
-		//"group.id":          "myGroup",
-		//"auto.offset.reset": "earliest",
-	})
 	return &MQ{
 		CClient: consumer,
-		PClient: producer,
 	}
 }

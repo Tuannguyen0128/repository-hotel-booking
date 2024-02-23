@@ -22,3 +22,7 @@ type Account struct {
 type Accounts struct {
 	Accounts []Account `json:"accounts"`
 }
+
+type AddAccountResponse struct {
+	ID string `json:"id"`
+}
