@@ -18,8 +18,11 @@ func AccountRoutes(s *service.Service) []Route {
 			Uri:    "/accounts",
 			Method: http.MethodGet,
 			Handler: func(c *gin.Context) {
-				page, _ := strconv.Atoi(c.Query("page"))
-				size, _ := strconv.Atoi(c.Query("size"))
+				page, er := strconv.Atoi(c.Query("page"))
+				size, er := strconv.Atoi(c.Query("size"))
+				if er != nil {
+
+				}
 				accountQuery := &model.AccountQuery{
 					ID:       c.Query("id"),
 					StaffID:  c.Query("staff_id"),
@@ -55,6 +58,22 @@ func AccountRoutes(s *service.Service) []Route {
 				c.JSON(http.StatusOK, util.BuildResponse(err, model.AddAccountResponse{ID: id}))
 			},
 		},
+		// Update one account
+		//{
+		//	Uri:    "/account",
+		//	Method: http.MethodPut,
+		//	Handler: func(c *gin.Context) {
+		//		newAccount := &model.Account{}
+		//		c.ShouldBindJSON(newAccount)
+		//		id, err := s.AddAccount(newAccount)
+		//		if err.Code != "" {
+		//			log.Println(err.Error())
+		//			c.JSON(http.StatusBadRequest, util.BuildResponse(err, nil))
+		//			return
+		//		}
+		//		c.JSON(http.StatusOK, util.BuildResponse(err, model.AddAccountResponse{ID: id}))
+		//	},
+		//},
 		//{
 		//	Uri:          "/account/{id}",
 		//	Method:       http.MethodGet,

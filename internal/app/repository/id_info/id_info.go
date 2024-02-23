@@ -2,7 +2,6 @@ package id_info
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"repository-hotel-booking/internal/app/model"
 	"strconv"
@@ -70,19 +69,16 @@ func IncreaseID(db *sql.DB, name string) error {
 	query := "UPDATE ID_INFO SET CURRENT = CURRENT + 1 WHERE NAME = ? "
 	stmt, err := db.Prepare(query)
 	if err != nil {
-		fmt.Println(err.Error())
 		return nil
 	}
 	_, err = stmt.Exec(name)
 	if err != nil {
-		fmt.Println(err.Error())
 		return nil
 	}
 
 	unlockWrite := "UNLOCK TABLES"
 	_, err = db.Exec(unlockWrite)
 	if err != nil {
-		fmt.Println(err.Error())
 		return nil
 	}
 

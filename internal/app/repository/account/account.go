@@ -74,12 +74,12 @@ func (r *Repository) InsertAccount(a *model.Account) (string, *model.ErrInfo) {
 		"(?,?,?,?,?)"
 	stmt, err := r.db.Prepare(query)
 	if err != nil {
-		return newID, util.BuildErrInfo("E01", err.Error())
+		return "", util.BuildErrInfo("E01", err.Error())
 	}
 	_, err = stmt.Exec(newID, a.StaffID, a.Username, a.Password, a.UserRoleID)
 	if err != nil {
 		fmt.Println(err.Error())
-		return newID, util.BuildErrInfo("E01", err.Error())
+		return "", util.BuildErrInfo("E01", err.Error())
 	}
 
 	err = id_info.IncreaseID(r.db, "ACCOUNT")
