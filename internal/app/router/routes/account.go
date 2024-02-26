@@ -60,22 +60,22 @@ func AccountRoutes(s *service.Service) []Route {
 				c.JSON(http.StatusOK, util.BuildResponse(err, model.AddAccountResponse{ID: id}))
 			},
 		},
-		// Update one account
-		//{
-		//	Uri:    "/account",
-		//	Method: http.MethodPut,
-		//	Handler: func(c *gin.Context) {
-		//		newAccount := &model.Account{}
-		//		c.ShouldBindJSON(newAccount)
-		//		id, err := s.AddAccount(newAccount)
-		//		if err.Code != "" {
-		//			log.Println(err.Error())
-		//			c.JSON(http.StatusBadRequest, util.BuildResponse(err, nil))
-		//			return
-		//		}
-		//		c.JSON(http.StatusOK, util.BuildResponse(err, model.AddAccountResponse{ID: id}))
-		//	},
-		//},
+		//Update one account
+		{
+			Uri:    "/account",
+			Method: http.MethodPut,
+			Handler: func(c *gin.Context) {
+				newAccount := &model.Account{}
+				c.ShouldBindJSON(newAccount)
+				updatedAccount, err := s.UpdateAccount(newAccount)
+				if err.Code != "" {
+					log.Println(err.Error())
+					c.JSON(http.StatusBadRequest, util.BuildResponse(err, nil))
+					return
+				}
+				c.JSON(http.StatusOK, util.BuildResponse(err, updatedAccount))
+			},
+		},
 		//{
 		//	Uri:          "/account/{id}",
 		//	Method:       http.MethodGet,
@@ -91,11 +91,26 @@ func AccountRoutes(s *service.Service) []Route {
 		//	Method:       http.MethodPut,
 		//	Handler:      service.UpdateAccount,
 		//},
-		//{
-		//	Uri:          "/account/{id}",
-		//	Method:       http.MethodDelete,
-		//	Handler:      service.DeleteAccount,
-		//},
+		{
+			Uri:    "/account/:id",
+			Method: http.MethodDelete,
+			Handler: func(c *gin.Context) {
+				id := c.Param("id")
+				if id == "" {
+					c.JSON(http.StatusBadRequest, util.BuildResponse(&model.ErrInfo{
+						Code:    "E02",
+						Message: "Invalid id",
+					}, nil))
+				}
+				result, err := s.DeleteAccount(id)
+				if err.Code != "" {
+					log.Println(err.Error())
+					c.JSON(http.StatusBadRequest, util.BuildResponse(err, nil))
+					return
+				}
+				c.JSON(http.StatusOK, util.BuildResponse(err, result))
+			},
+		},
 		//{
 		//	Uri:          "/get-account-by-email",
 		//	Method:       http.MethodGet,

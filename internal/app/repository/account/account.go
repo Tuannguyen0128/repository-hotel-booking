@@ -7,6 +7,7 @@ import (
 	"repository-hotel-booking/internal/app/model"
 	"repository-hotel-booking/internal/app/repository/id_info"
 	"repository-hotel-booking/internal/app/util"
+	"time"
 )
 
 type Repository struct {
@@ -68,6 +69,7 @@ func (r *Repository) GetAccounts(q *model.AccountQuery) ([]model.Account, *model
 }
 
 func (r *Repository) InsertAccount(a *model.Account) (string, *model.ErrInfo) {
+	log.Println(*a)
 	IDInfo := id_info.GetIDInfo(r.db, "ACCOUNT")
 	newID := id_info.GetNewID(IDInfo)
 	query := "INSERT INTO ACCOUNT(`ID`,`STAFF_ID`,`USERNAME`,`PASSWORD`,`USER_ROLE_ID`) VALUES " +
@@ -88,4 +90,41 @@ func (r *Repository) InsertAccount(a *model.Account) (string, *model.ErrInfo) {
 	}
 
 	return newID, util.BuildErrInfo("", "")
+}
+
+func (r *Repository) DeleteAccount(id string) (string, *model.ErrInfo) {
+	query := "DELETE from ACCOUNT where ID=?"
+	stmt, err := r.db.Prepare(query)
+	if err != nil {
+		return "", util.BuildErrInfo("E01", err.Error())
+	}
+	result, err := stmt.Exec(id)
+	log.Println(stmt)
+	log.Println(result)
+	if err != nil {
+
+		return "", util.BuildErrInfo("E01", err.Error())
+	}
+
+	return "Deleted", util.BuildErrInfo("", "")
+}
+
+func (r *Repository) UpdateAccount(a *model.Account) (*model.Account, *model.ErrInfo) {
+	log.Println(*a)
+	query := "UPDATE ACCOUNT SET STAFF_ID=?, USERNAME=?, Password=?, USER_ROLE_ID=?, Updated_At=? WHERE ID=?"
+	stmt, err := r.db.Prepare(query)
+	if err != nil {
+		return nil, util.BuildErrInfo("E01", err.Error())
+	}
+	_, err = stmt.Exec(a.StaffID, a.Username, a.Password, a.UserRoleID, time.Now(), a.ID)
+	if err != nil {
+
+		return nil, util.BuildErrInfo("E01", err.Error())
+	}
+
+	account, errI := r.GetAccounts(&model.AccountQuery{ID: a.ID})
+	if errI.Code != "" {
+		return nil, util.BuildErrInfo("E01", err.Error())
+	}
+	return &account[0], util.BuildErrInfo("", "")
 }
