@@ -2,9 +2,11 @@ package model
 
 type (
 	Config struct {
-		Kafka  KafkaConfig  `mapstructure:"kafka"`
-		DB     DBConfig     `mapstructure:"database"`
-		Server ServerConfig `mapstructure:"server"`
+		DB               DBConfig     `mapstructure:"database"`
+		Server           ServerConfig `mapstructure:"server"`
+		KafkaServer      string       `mapstructure:"kafka_server"`
+		KafkaBrokerTopic string       `mapstructure:"kafka_broker-topic"`
+		KafkaRepoTopic   string       `mapstructure:"kafka_repo-topic"`
 	}
 
 	KafkaConfig struct {

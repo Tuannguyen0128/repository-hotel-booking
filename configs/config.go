@@ -1,4 +1,4 @@
-package util
+package configs
 
 import (
 	"github.com/pkg/errors"

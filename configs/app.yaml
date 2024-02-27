@@ -1,8 +1,6 @@
-kafka:
-  brokers:
-   - 0.0.0.0:29092
-  username: admin
-  password: admin
+kafka_server : "localhost:29092"
+kafka_broker-topic : "broker-repo"
+kafka_repo-topic : "repo-broker"
 
 database:
   host: localhost:3306
