@@ -26,3 +26,11 @@ type Accounts struct {
 type AddAccountResponse struct {
 	ID string `json:"id"`
 }
+
+type DeleteAccountRequest struct {
+	ID string `json:"id"`
+}
+
+type DeleteAccountResponse struct {
+	Result string `json:"result"`
+}

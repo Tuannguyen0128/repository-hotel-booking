@@ -6,6 +6,7 @@ import (
 	"github.com/segmentio/kafka-go"
 	"log"
 	"repository-hotel-booking/internal/app/kafka/producer"
+	"repository-hotel-booking/internal/app/router"
 	"repository-hotel-booking/internal/app/service"
 )
 
@@ -22,10 +23,9 @@ func (k *Consumer) ReadMessage(s *service.Service, producer *producer.Producer) 
 		}
 		req := &KafkaRequest{}
 		json.Unmarshal(m.Value, req)
-		s.DeliveryService(req.ServiceName, req.Payload, producer)
-		fmt.Printf("message at offset %d: %s = %s\n", m.Offset, string(m.Key), req)
+		router.DeliveryService(req.ServiceName, &req.Payload, producer, s)
+		fmt.Printf("Received message %+v", req)
 	}
-
 	if err := k.ConsumerConn.Close(); err != nil {
 		log.Fatal("failed to close reader:", err)
 	}

@@ -10,6 +10,7 @@ import (
 	"repository-hotel-booking/internal/app/repository"
 	"repository-hotel-booking/internal/app/service"
 	"repository-hotel-booking/internal/app/util"
+	"time"
 )
 
 var KafkaConsumer *consumer.Consumer
@@ -20,10 +21,10 @@ func main() {
 	if err := configs.LoadConfigs("", configPath, "app", app.CFG); err != nil {
 		log.Panicf("error while reading app configs %v", err)
 	}
+	time.LoadLocation("Asia/Ho_Chi_Minh")
 	db := util.InitConnection(app.CFG.DB)
 	repo := repository.New(db)
 	KafkaConsumer, KafkaProducer = kafka.InitConnection(app.CFG.KafkaServer, app.CFG.KafkaRepoTopic, app.CFG.KafkaBrokerTopic, 0)
 	s := service.NewService(repo)
 	KafkaConsumer.ReadMessage(s, KafkaProducer)
-	//app.Init()
 }

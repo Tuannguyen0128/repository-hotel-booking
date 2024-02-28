@@ -99,7 +99,7 @@ func (r *Repository) DeleteAccount(id string) (string, *model.ErrInfo) {
 		return "", util.BuildErrInfo("E01", err.Error())
 	}
 	result, err := stmt.Exec(id)
-	log.Println(stmt)
+	log.Println(query)
 	log.Println(result)
 	if err != nil {
 
@@ -116,6 +116,7 @@ func (r *Repository) UpdateAccount(a *model.Account) (*model.Account, *model.Err
 	if err != nil {
 		return nil, util.BuildErrInfo("E01", err.Error())
 	}
+	time.LoadLocation("Asia/Ho_Chi_Minh")
 	_, err = stmt.Exec(a.StaffID, a.Username, a.Password, a.UserRoleID, time.Now(), a.ID)
 	if err != nil {
 
