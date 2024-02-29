@@ -13,7 +13,6 @@ func DeliveryService(serviceName string, payload *interface{}, producer *produce
 	switch serviceName {
 	case "GetAccounts":
 		message, err = controller.GetAccounts(payload, service)
-
 		break
 	case "CreateAccount":
 		message, err = controller.CreateAccount(payload, service)
@@ -24,8 +23,20 @@ func DeliveryService(serviceName string, payload *interface{}, producer *produce
 	case "UpdateAccount":
 		message, err = controller.UpdateAccount(payload, service)
 		break
-
+	case "GetStaffs":
+		message, err = controller.GetStaffs(payload, service)
+		break
+	case "CreateStaff":
+		message, err = controller.CreateStaff(payload, service)
+		break
+	case "DeleteStaff":
+		message, err = controller.DeleteStaff(payload, service)
+		break
+	case "UpdateStaff":
+		message, err = controller.UpdateStaff(payload, service)
+		break
 	}
+
 	if err != nil {
 		fmt.Println(err)
 	}
